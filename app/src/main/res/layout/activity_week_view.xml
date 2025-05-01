@@ -8,66 +8,48 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".MainActivity">
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Weekly"
-        android:onClick="weeklyAction"
-        android:textColor="@color/blue"
-        android:background="@null"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textAlignment="center"
-        />
+    tools:context=".WeekViewActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
         android:layout_marginBottom="20dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="20dp">
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="-"
-            android:onClick="previousMonthAction"
             android:textColor="@color/blue"
             android:background="@null"
             android:textStyle="bold"
-            android:textSize="20sp"
-            android:textAlignment="center"
-            />
+            android:onClick="previousWeekAction"
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/monthYearTV"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="wrap_content"
-            android:text="@string/Date"
+            android:text="Feb 2021"
             android:textSize="20sp"
             android:textAlignment="center"
-            android:textColor="@color/black"
-            />
+            android:textColor="@color/black"/>
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="+"
-            android:onClick="nextMonthAction"
             android:textColor="@color/blue"
             android:background="@null"
             android:textStyle="bold"
-            android:textSize="20sp"
-            android:textAlignment="center"
-            />
-    </LinearLayout>
+            android:onClick="nextWeekAction"
+            android:textSize="20sp"/>
 
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,82 +58,93 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Sun"
-            android:textSize="16sp"
-            android:textAlignment="center"
             android:textColor="@color/grey"
-            />
+            android:textAlignment="center"
+            android:textSize="16sp"/>
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Mon"
-            android:textSize="16sp"
-            android:textAlignment="center"
             android:textColor="@color/grey"
-            />
+            android:textAlignment="center"
+            android:textSize="16sp"/>
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Tue"
-            android:textSize="16sp"
-            android:textAlignment="center"
             android:textColor="@color/grey"
-            />
+            android:textAlignment="center"
+            android:textSize="16sp"/>
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Wed"
-            android:textSize="16sp"
-            android:textAlignment="center"
             android:textColor="@color/grey"
-            />
+            android:textAlignment="center"
+            android:textSize="16sp"/>
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Thu"
-            android:textSize="16sp"
-            android:textAlignment="center"
             android:textColor="@color/grey"
-            />
+            android:textAlignment="center"
+            android:textSize="16sp"/>
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Fri"
-            android:textSize="16sp"
-            android:textAlignment="center"
             android:textColor="@color/grey"
-            />
+            android:textAlignment="center"
+            android:textSize="16sp"/>
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Sat"
-            android:textSize="16sp"
-            android:textAlignment="center"
             android:textColor="@color/grey"
-            />
-
+            android:textAlignment="center"
+            android:textSize="16sp"/>
 
 
     </LinearLayout>
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/calendarRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-    
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Event"
+        android:textColor="@color/blue"
+        android:background="@null"
+        android:textStyle="bold"
+        android:onClick="newEventAction"
+        android:layout_gravity="center"
+        android:textSize="20sp"/>
+
+    <ListView
+        android:id="@+id/eventListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"/>
+
+
 </LinearLayout>
