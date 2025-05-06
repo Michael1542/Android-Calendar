@@ -19,19 +19,19 @@ class EventAdapter(
 
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
+        var convertViewNew = convertView
         val event = getItem(position)
 
-        if (convertView == null) convertView =
-            LayoutInflater.from(context).inflate(R.layout.event_cell, parent, false)
+        if (convertViewNew == null)
+            convertViewNew = LayoutInflater.from(context).inflate(R.layout.event_cell, parent, false)
 
-        val eventCellTV = convertView!!.findViewById<TextView>(R.id.eventCellTV)
+        val eventCellTV = convertViewNew!!.findViewById<TextView>(R.id.eventCellTV)
 
         val eventTitle = event!!.getName() + " " + CalendarUtils.formattedTime(
-            event!!.getTime()!!
+            event.getTime()!!
         )
         eventCellTV.text = eventTitle
-        return convertView
+        return convertViewNew
     }
 
 }

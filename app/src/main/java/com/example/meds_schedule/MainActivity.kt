@@ -56,10 +56,8 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener {
     }
 
     override fun onItemClick(position: Int, date : LocalDate){
-        if(date != null) {
-            CalendarUtils.selectedDate = date;
-            setMonthView();
-        }
+        CalendarUtils.selectedDate = date;
+        setMonthView();
 
     }
 

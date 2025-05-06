@@ -17,7 +17,7 @@ class WeekViewActivity : AppCompatActivity(),CalendarAdapter.OnItemListener {
 
     private var monthYearText: TextView? = null
     private var calendarRecyclerView: RecyclerView? = null
-    private var eventListView: ListView? = null
+    private lateinit var eventListView: ListView;
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +63,7 @@ class WeekViewActivity : AppCompatActivity(),CalendarAdapter.OnItemListener {
     private fun setEventAdapter() {
         val dailyEvents: ArrayList<Event> = Event.eventsForDate(CalendarUtils.selectedDate)
         val eventAdapter = EventAdapter(applicationContext, 0, dailyEvents)
-        eventListView!!.adapter = eventAdapter
+        eventListView.adapter = eventAdapter
     }
 
     fun newEventAction(view: View?) {

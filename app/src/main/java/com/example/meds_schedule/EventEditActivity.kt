@@ -1,5 +1,6 @@
 package com.example.meds_schedule
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -19,9 +20,9 @@ class EventEditActivity : AppCompatActivity() {
 
     private lateinit var time: LocalTime;
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_event_edit)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -32,6 +33,7 @@ class EventEditActivity : AppCompatActivity() {
         time = LocalTime.now();
         eventDateTV.text = "Date: " + CalendarUtils.formattedDate(CalendarUtils.selectedDate);
         eventTimeTV.text = "Time: " + CalendarUtils.formattedTime(time);
+
     }
 
 
@@ -43,10 +45,10 @@ class EventEditActivity : AppCompatActivity() {
 
 
     fun saveEventAction(view: View?) {
-        val eventName: String = eventNameET.getText().toString()
+        val eventName: String = eventNameET.text.toString()
         val newEvent: Event = Event(eventName, CalendarUtils.selectedDate, time)
         Event.eventsList.add(newEvent)
-        finish()
+        finish();
     }
 
 
