@@ -1,5 +1,6 @@
 package com.example.meds_schedule
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,12 +21,13 @@ class EventsAdapter(private var events: List<Event>) : RecyclerView.Adapter<Even
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
-        holder.title.text = event.title
+        holder.title.text = event.category
         holder.description.text = event.description ?: ""
     }
 
     override fun getItemCount() =events.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateEvents(newEvents: List<Event>) {
         events = newEvents
         notifyDataSetChanged()

@@ -2,9 +2,13 @@ package com.example.meds_schedule
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.CalendarView
 import android.widget.CalendarView.OnDateChangeListener
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,10 +25,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var eventsAdapter: EventsAdapter
     lateinit var recyclerView: RecyclerView
     var formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-
+    var selectedDate = LocalDate.now()
     private val eventsList = mutableListOf(
-        Event(title = "Meeting", description = "Discuss project", date = LocalDate.now()),
-        Event(title = "Gym", description = "Leg day", date = LocalDate.now())
+        Event(category = "Meeting", description = "Discuss project", date = LocalDate.now()),
+        Event(category = "Gym", description = "Leg day", date = LocalDate.now())
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +46,10 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = eventsAdapter
         // on below line we are adding set on
         // date change listener for calendar view.
+        val addButton = findViewById<Button>(R.id.addEventButton)
+        addButton.setOnClickListener {
+            showAddEventDialog(selectedDate)  // Use current selected date
+        }
 
         calendarView
             .setOnDateChangeListener(
@@ -52,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                     // in which we are adding all the variables in it.
                     val Date = (dayOfMonth.toString() + "-"
                             + (month + 1) + "-" + year)
-
+                    selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
                     // set this date in TextView for Display
                     dateTV.setText(Date)
                     updateEventsForDate(LocalDate.of(year, month + 1, dayOfMonth))
@@ -68,8 +76,38 @@ class MainActivity : AppCompatActivity() {
         val eventsForDate = eventsList.filter { it.date == date }
         eventsAdapter.updateEvents(eventsForDate)
     }
+
+    private fun showAddEventDialog(selectedDate: LocalDate) {
+        // Inflate custom layout
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.add_event, null)
+
+        val titleInput = dialogView.findViewById<EditText>(R.id.inputTitle)
+        val descInput = dialogView.findViewById<EditText>(R.id.inputDescription)
+
+        AlertDialog.Builder(this)
+            .setTitle("Add Event for $selectedDate")
+            .setView(dialogView)
+            .setPositiveButton("Save") { _, _ ->
+                val title = titleInput.text.toString()
+                val desc = descInput.text.toString()
+
+                if (title.isNotBlank()) {
+                    val newEvent = Event(category = title, description = desc, date = selectedDate)
+                    eventsList.add(newEvent)
+                    updateEventsForDate(selectedDate) // Refresh list
+                } else {
+                    Toast.makeText(this, "Title cannot be empty", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
 }
 
 
 
 //add
+
+
+
