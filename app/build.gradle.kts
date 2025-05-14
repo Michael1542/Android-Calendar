@@ -42,7 +42,16 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    annotationProcessor(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.common.jvm)
+    implementation(libs.androidx.room.runtime.jvm)
+//(libs.androidx.room.rtx)
+   // ksp(libs.androidx.room.compiler)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+
+
 }

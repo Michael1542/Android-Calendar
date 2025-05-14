@@ -101,8 +101,15 @@ class MainActivity : AppCompatActivity() {
             }
             .setNegativeButton("Cancel", null)
             .show()
+
+
     }
 
+    private val eventDao = EventDatabase.getDatabase(this).eventDao()
+
+    private suspend fun storeEvents(events: List<Event>) {
+        if (events.isNotEmpty()) eventDao
+    }
 }
 
 
