@@ -12,10 +12,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import android.util.Log;
+import java.time.LocalDateTime
+import java.util.Locale
 
 
+const val TAG = "MainCalendarActivity"
 
 class MainActivity : AppCompatActivity() {
     // on below line we are creating
@@ -26,14 +32,61 @@ class MainActivity : AppCompatActivity() {
     lateinit var recyclerView: RecyclerView
     var formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     var selectedDate = LocalDate.now()
+
+
     private val eventsList = mutableListOf(
-        Event(category = "Meeting", description = "Discuss project", date = LocalDate.now()),
-        Event(category = "Gym", description = "Leg day", date = LocalDate.now())
+        Event(category = "Meditate", description = "Plank one minute", date = LocalDate.now()),
+        Event(category = "Exercise", description = "Gym", date = LocalDate.now())
     )
+    val driver: SqlDriver = AndroidSqliteDriver(EventDatabase.Schema, this, "event.db")
+    val database = EventDatabase(driver);
+    val eventQueries = database.eventDatabaseQueries
+
+    /*val eventsListDatabase = eventQueries.selectAllEvents().executeAsList().map{
+        Event(
+            category = it.category,
+            description = it.description,
+            date = LocalDate.parse(it.date)
+        )
+    }*/
+
+    val formatter2 = DateTimeFormatter.ofPattern("MMM dd, yyyy, HH:mm:ss", Locale.ENGLISH)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.v(TAG, "Events: $eventsList");
+        //Log.v(TAG, "Events Original: $eventsListDatabase");
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        val eventsListDatabase = eventQueries.selectAllEvents().executeAsList().mapNotNull {
+            try {
+                val parsedDate = try {
+                    LocalDate.parse(it.date) // If it's ISO "yyyy-MM-dd"
+                } catch (e: Exception) {
+                    LocalDateTime.parse(it.date, formatter2)
+                        .toLocalDate() // Handle "May 19, 2025, 20:00:00"
+                }
+
+                Event(
+                    category = it.category,
+                    description = it.description,
+                    date = parsedDate
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.v(TAG, "issue");
+                Log.v(TAG, e.toString());
+                null // Skip broken entries
+            }
+        }
+
+        Log.v(TAG, "Events Original: $eventsListDatabase");
+
+        eventsList.addAll(eventsListDatabase);
 
         // initializing variables of
         // list view with their ids.
@@ -94,6 +147,11 @@ class MainActivity : AppCompatActivity() {
                 if (title.isNotBlank()) {
                     val newEvent = Event(category = title, description = desc, date = selectedDate)
                     eventsList.add(newEvent)
+                    eventQueries.insertEvent(
+                        date = selectedDate.toString(),
+                        category = title,
+                        description = desc
+                    )
                     updateEventsForDate(selectedDate) // Refresh list
                 } else {
                     Toast.makeText(this, "Title cannot be empty", Toast.LENGTH_SHORT).show()

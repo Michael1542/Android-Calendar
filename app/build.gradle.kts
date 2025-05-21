@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("app.cash.sqldelight") version "2.0.2"
 }
 
 android {
@@ -36,13 +37,24 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.sqlite.framework.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("app.cash.sqldelight:android-driver:2.0.2")
+
+}
+
+
+sqldelight {
+    databases {
+        create("EventDatabase") {
+            packageName.set("com.example.meds_schedule")
+        }
+    }
 }
