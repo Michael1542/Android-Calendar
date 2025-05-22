@@ -17,8 +17,10 @@ import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import android.util.Log;
+import android.widget.Spinner
 import java.time.LocalDateTime
 import java.util.Locale
+import android.widget.ArrayAdapter
 
 
 const val TAG = "MainCalendarActivity"
@@ -50,13 +52,8 @@ class MainActivity : AppCompatActivity() {
         )
     }*/
 
-    val formatter2 = DateTimeFormatter.ofPattern("MMM dd, yyyy, HH:mm:ss", Locale.ENGLISH)
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.v(TAG, "Events: $eventsList");
-        //Log.v(TAG, "Events Original: $eventsListDatabase");
-
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -67,11 +64,12 @@ class MainActivity : AppCompatActivity() {
                 val parsedDate = try {
                     LocalDate.parse(it.date) // If it's ISO "yyyy-MM-dd"
                 } catch (e: Exception) {
-                    LocalDateTime.parse(it.date, formatter2)
+                    LocalDateTime.parse(it.date, DateTimeFormatter.ofPattern("MMM dd, yyyy, HH:mm:ss", Locale.ENGLISH))
                         .toLocalDate() // Handle "May 19, 2025, 20:00:00"
                 }
 
                 Event(
+                    id = it.id,
                     category = it.category,
                     description = it.description,
                     date = parsedDate
@@ -134,14 +132,25 @@ class MainActivity : AppCompatActivity() {
         // Inflate custom layout
         val dialogView = LayoutInflater.from(this).inflate(R.layout.add_event, null)
 
-        val titleInput = dialogView.findViewById<EditText>(R.id.inputTitle)
+        val categorySpinner: Spinner = dialogView.findViewById(R.id.inputCategory)
+        val categories = listOf("Meditate", "Exercise", "Diet", "Sleep")
+        val spinnerAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            categories
+        )
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        categorySpinner.adapter = spinnerAdapter
+
+
+        //val titleInput = dialogView.findViewById<EditText>(R.id.inputCategory)
         val descInput = dialogView.findViewById<EditText>(R.id.inputDescription)
 
         AlertDialog.Builder(this)
             .setTitle("Add Event for $selectedDate")
             .setView(dialogView)
             .setPositiveButton("Save") { _, _ ->
-                val title = titleInput.text.toString()
+                val title = categorySpinner.selectedItem.toString()
                 val desc = descInput.text.toString()
 
                 if (title.isNotBlank()) {

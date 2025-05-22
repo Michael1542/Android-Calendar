@@ -1,5 +1,12 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">MEDS_Schedule</string>
     <string name="forward"><![CDATA[->]]></string>
     <string name="Date">Feb 2021</string>
+    <string-array name="categories">
+        <item>Meditate</item>
+        <item>Exercise</item>
+        <item>Diet</item>
+        <item>Sleep</item>
+    </string-array>
+
 </resources>

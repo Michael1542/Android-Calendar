@@ -14,3 +14,6 @@ SELECT * FROM Event WHERE date = ?;
 insertEvent:
 INSERT INTO Event(date, category, description)
 VALUES (?, ?, ?);
+
+deleteEvent:
+DELETE FROM Event WHERE id = ?;
