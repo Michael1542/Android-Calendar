@@ -9,12 +9,14 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class EventsAdapter(private var events: List<Event>) : RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
+class EventsAdapter(private var events: List<Event>,
+    private val onfinishedEvent: (Event) -> Unit
+    ) : RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
 
     class EventViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.eventTitle)
         val description: TextView = view.findViewById(R.id.eventDescription)
-
+        val done: TextView = view.findViewById(R.id.eventDone)
 
     }
 
@@ -29,6 +31,10 @@ class EventsAdapter(private var events: List<Event>) : RecyclerView.Adapter<Even
         val event = events[position]
         holder.title.text = event.category
         holder.description.text = event.description ?: ""
+        holder.done.setOnClickListener {
+            onfinishedEvent(event)
+        }
+
     }
 
     override fun getItemCount() =events.size

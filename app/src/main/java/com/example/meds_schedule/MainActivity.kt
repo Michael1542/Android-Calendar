@@ -32,8 +32,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var calendarView: CalendarView
     lateinit var eventsAdapter: EventsAdapter
     lateinit var recyclerView: RecyclerView
-    var formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-    var selectedDate = LocalDate.now()
+    var selectedDate: LocalDate = LocalDate.now()
 
 
     private val eventsList = mutableListOf(
@@ -90,7 +89,17 @@ class MainActivity : AppCompatActivity() {
         // list view with their ids.
         dateTV = findViewById(R.id.idTVDate)
         calendarView = findViewById(R.id.calendarView)
-        eventsAdapter = EventsAdapter(emptyList())
+        eventsAdapter = EventsAdapter(emptyList()
+        ) { eventToDelete: Event ->
+            AlertDialog.Builder(this)
+                .setTitle("Delete Event")
+                .setMessage("Are you sure you want to delete '${eventToDelete.description}'?")
+                .setPositiveButton("Yes") { _, _ ->
+                    eventQueries.deleteEvent(eventToDelete.id)
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
 
         recyclerView = findViewById(R.id.eventsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
