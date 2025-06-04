@@ -26,19 +26,21 @@ import android.widget.ArrayAdapter
 const val TAG = "MainCalendarActivity"
 
 class MainActivity : AppCompatActivity() {
-    // on below line we are creating
-    // variables for text view and calendar view
-    lateinit var dateTV: TextView
-    lateinit var calendarView: CalendarView
-    lateinit var eventsAdapter: EventsAdapter
-    lateinit var recyclerView: RecyclerView
-    var selectedDate: LocalDate = LocalDate.now()
+
+    private lateinit var dateTV: TextView
+    private lateinit var calendarView: CalendarView
+    private lateinit var eventsAdapter: EventsAdapter
+    private lateinit var recyclerView: RecyclerView
+    private var selectedDate: LocalDate = LocalDate.now()
 
 
-    private val eventsList = mutableListOf(
+    /*private val eventsList = mutableListOf(
         Event(category = "Meditate", description = "Plank one minute", date = LocalDate.now()),
         Event(category = "Exercise", description = "Gym", date = LocalDate.now())
-    )
+    )*/
+
+    private val eventsList: MutableList<Event> = mutableListOf();
+
     val driver: SqlDriver = AndroidSqliteDriver(EventDatabase.Schema, this, "event.db")
     val database = EventDatabase(driver);
     val eventQueries = database.eventDatabaseQueries
@@ -52,7 +54,6 @@ class MainActivity : AppCompatActivity() {
     }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.v(TAG, "Events: $eventsList");
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -61,12 +62,10 @@ class MainActivity : AppCompatActivity() {
         val eventsListDatabase = eventQueries.selectAllEvents().executeAsList().mapNotNull {
             try {
                 val parsedDate = try {
-                    LocalDate.parse(it.date) // If it's ISO "yyyy-MM-dd"
+                    LocalDate.parse(it.date)
                 } catch (e: Exception) {
-                    LocalDateTime.parse(it.date, DateTimeFormatter.ofPattern("MMM dd, yyyy, HH:mm:ss", Locale.ENGLISH))
-                        .toLocalDate() // Handle "May 19, 2025, 20:00:00"
+                    LocalDateTime.parse(it.date, DateTimeFormatter.ofPattern("MMM dd, yyyy, HH:mm:ss", Locale.ENGLISH)).toLocalDate()
                 }
-
                 Event(
                     id = it.id,
                     category = it.category,
@@ -74,62 +73,49 @@ class MainActivity : AppCompatActivity() {
                     date = parsedDate
                 )
             } catch (e: Exception) {
-                e.printStackTrace()
-                Log.v(TAG, "issue");
-                Log.v(TAG, e.toString());
-                null // Skip broken entries
+                null
             }
         }
 
-        Log.v(TAG, "Events Original: $eventsListDatabase");
-
         eventsList.addAll(eventsListDatabase);
+        Log.v(TAG, "Events: $eventsList");
 
-        // initializing variables of
-        // list view with their ids.
+
+        // initialize views by ids
         dateTV = findViewById(R.id.idTVDate)
         calendarView = findViewById(R.id.calendarView)
+        recyclerView = findViewById(R.id.eventsRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
         eventsAdapter = EventsAdapter(emptyList()
         ) { eventToDelete: Event ->
             AlertDialog.Builder(this)
-                .setTitle("Delete Event")
-                .setMessage("Are you sure you want to delete '${eventToDelete.description}'?")
+                .setTitle("Check Off Event")
+                .setMessage("Are you finished with '${eventToDelete.description}'?")
                 .setPositiveButton("Yes") { _, _ ->
                     eventQueries.deleteEvent(eventToDelete.id)
                 }
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton("No", null)
                 .show()
         }
 
-        recyclerView = findViewById(R.id.eventsRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = eventsAdapter
-        // on below line we are adding set on
-        // date change listener for calendar view.
+
+
         val addButton = findViewById<Button>(R.id.addEventButton)
         addButton.setOnClickListener {
-            showAddEventDialog(selectedDate)  // Use current selected date
+            showAddEventDialog(selectedDate)
         }
 
         calendarView
             .setOnDateChangeListener(
                 OnDateChangeListener { view, year, month, dayOfMonth ->
-                    // In this Listener we are getting values
-                    // such as year, month and day of month
-                    // on below line we are creating a variable
-                    // in which we are adding all the variables in it.
-                    val Date = (dayOfMonth.toString() + "-"
+                    val date = (dayOfMonth.toString() + "-"
                             + (month + 1) + "-" + year)
                     selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
-                    // set this date in TextView for Display
-                    dateTV.setText(Date)
+                    dateTV.text = date
                     updateEventsForDate(LocalDate.of(year, month + 1, dayOfMonth))
-
-
                 })
-
-
-
     }
 
     private fun updateEventsForDate(date : LocalDate) {
@@ -138,9 +124,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showAddEventDialog(selectedDate: LocalDate) {
-        // Inflate custom layout
         val dialogView = LayoutInflater.from(this).inflate(R.layout.add_event, null)
-
         val categorySpinner: Spinner = dialogView.findViewById(R.id.inputCategory)
         val categories = listOf("Meditate", "Exercise", "Diet", "Sleep")
         val spinnerAdapter = ArrayAdapter(
@@ -180,10 +164,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-
-
-
-//add
-
-
 

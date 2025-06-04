@@ -13,10 +13,10 @@
 
     <EditText
         android:id="@+id/inputDescription"
+        android:layout_width="372dp"
+        android:layout_height="48dp"
+        android:gravity="top"
         android:hint="Description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:inputType="textMultiLine"
-        android:lines="3"
-        android:gravity="top"/>
+        android:lines="3" />
 </LinearLayout>

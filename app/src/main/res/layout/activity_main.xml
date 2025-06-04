@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/clouds">
 
     <!--text view for displaying the selected date-->
     <LinearLayout
@@ -13,36 +14,41 @@
 
 
         <!-- Add CalendarView to display the Calendar -->
-        <CalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/idTVDate"
-            android:layout_marginTop="30dp" />
-
         <TextView
             android:id="@+id/idTVDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/darkblue"
             android:gravity="center"
             android:padding="8dp"
-            android:text="Current Date"
+            android:text="MEDS Checklist"
             android:textAlignment="center"
-            android:textColor="@color/blue"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+        <CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="305dp"
+            android:layout_below="@id/idTVDate"
+            android:background="@color/transwhite"
+            android:selectedWeekBackgroundColor="@color/darkblue" />
+
         <Button
             android:id="@+id/addEventButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="+"
-            />
+            android:background="@color/lightblue"
+            android:text="+" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/eventsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_height="211dp"
+            android:layout_weight="1"
+            android:background="@color/transwhite" />
 
     </LinearLayout>
 

@@ -4,4 +4,7 @@
     <color name="blue">#0000ff</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="lightblue">#80dbf8ff</color>
+    <color name="darkblue">#801A3261</color>
+    <color name="transwhite">#80FFFFFF</color>
 </resources>
